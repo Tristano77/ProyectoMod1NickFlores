@@ -22,7 +22,7 @@ import libreria_clases_proyecto1 as lc
 # ----------------------------------------------------------
 
 st.set_page_config(
-    page_title="Proyecto 1 - Streamlit",
+    page_title="DMC Proyecto Mod 1",
     page_icon="🐍",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -33,7 +33,7 @@ st.set_page_config(
 # MENÚ LATERAL
 # ----------------------------------------------------------
 
-st.sidebar.title("📚 Proyecto 1")
+st.sidebar.title("Aplicación en Streamlit")
 
 st.sidebar.markdown("---")
 
@@ -99,7 +99,7 @@ if "registros_crud" not in st.session_state:
 
 if opcion == "Home":
 
-    st.title("📊 PROYECTO 1")
+    st.title("DMC PROYECTO 1")
     st.subheader("Aplicación desarrollada con Streamlit")
 
     st.markdown("---")
@@ -109,20 +109,18 @@ if opcion == "Home":
     with col1:
 
         # Reemplazar por una imagen propia
-        # st.image("logo.png", width=220)
-
-        st.info("Aquí puede colocar su logotipo o una imagen representativa.")
+        st.image("Python_logo.png", width=220)
 
     with col2:
 
         st.markdown("## Información del estudiante")
 
-        st.write("**Nombre:** Jhon Doe")
-
-        st.write("**Carrera:** Ingeniería Electrónica")
+        st.write("**Nombre:** Nick Dante Flores Pérez")
 
         st.write("**Módulo:** Python con Streamlit")
 
+        st.write("**Carrera:** Ingeniería Electrónica")
+        
         st.write("**Institución:** DMC")
 
         st.write("**Año:** 2026")
