@@ -1328,7 +1328,7 @@ En el proyecto se desarrollan cuatro ejercicios donde se utilizan:
 
     st.header("Tecnologías utilizadas")
 
-    c1, c2, c3, c4 = st.columns(4)
+    c1, c2, c3, c4, c5 = st.columns(5)
 
     with c1:
         st.metric("Lenguaje", "Python")
@@ -1341,6 +1341,8 @@ En el proyecto se desarrollan cuatro ejercicios donde se utilizan:
 
     with c4:
         st.metric("Arreglos", "NumPy")
+    with c5:
+        st.metric("Visualización", "Matplotlib")    
 
     st.markdown("---")
 
