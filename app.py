@@ -109,7 +109,7 @@ if opcion == "Home":
     with col1:
 
         # Reemplazar por una imagen propia
-        st.image("Python_logo.png", width=330)
+        st.image("Python_logo.png", width=440)
         st.image("DMC.png", width=330)
 
     with col2:
