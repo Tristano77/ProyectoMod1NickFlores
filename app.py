@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import plotly.express as px
 import libreria_funciones_proyecto1 as lf
 import libreria_clases_proyecto1 as lc
 
@@ -686,6 +687,59 @@ def ejercicio3():
                     "OEE",
                     f"{oee_final:.2f}%"
                 )
+
+            st.subheader("Visualización de Indicadores")
+            
+            grafico = pd.DataFrame({
+            
+                "Indicador":[
+                    "Disponibilidad",
+                    "OEE"
+                ],
+            
+                "Valor":[
+                    disponibilidad,
+                    oee_final
+                ]
+            
+            })
+            
+            fig = px.bar(
+            
+                grafico,
+            
+                x="Indicador",
+            
+                y="Valor",
+            
+                text="Valor",
+            
+                color="Indicador",
+            
+                range_y=[0,100]
+            
+            )
+            
+            fig.update_traces(
+            
+                texttemplate="%{text:.2f}%",
+            
+                textposition="outside"
+            
+            )
+            
+            fig.update_layout(
+            
+                showlegend=False,
+            
+                height=450
+            
+            )
+            
+            st.plotly_chart(
+                fig,
+                use_container_width=True
+            )
             st.divider()
 
             st.subheader("Diagnóstico")
