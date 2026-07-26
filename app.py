@@ -879,4 +879,7 @@ elif opcion == "Ejercicio 1":
 elif opcion == "Ejercicio 2":
 
     ejercicio2()
+elif opcion == "Ejercicio 3":
+
+    ejercicio3()
     
