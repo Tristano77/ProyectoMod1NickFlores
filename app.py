@@ -99,7 +99,7 @@ if "registros_crud" not in st.session_state:
 
 if opcion == "Home":
 
-    st.title("DMC PROYECTO 1")
+    st.title("DMC PROYECTO MODULO 1")
     st.subheader("Aplicación desarrollada con Streamlit")
 
     st.markdown("---")
@@ -108,19 +108,18 @@ if opcion == "Home":
 
     with col1:
 
-        # Reemplazar por una imagen propia
         st.image("Python_logo.png", width=440)
         st.image("DMC.png", width=330)
 
     with col2:
 
-        st.markdown("## Información del estudiante")
+        st.markdown("## Datos personales")
 
         st.write("**Nombre:** Nick Dante Flores Pérez")
 
-        st.write("**Módulo:** Python con Streamlit")
+        st.write("**About me:** Ingeniero Electrónico con especialidad en instrumentación y control de procesos.")
 
-        st.write("**Carrera:** Ingeniería Electrónica")
+        st.write("**Módulo:** Python con Streamlit")
         
         st.write("**Institución:** DMC")
 
