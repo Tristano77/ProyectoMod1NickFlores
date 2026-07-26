@@ -566,8 +566,9 @@ def ejercicio3():
     st.markdown("""
     ### Descripción
 
-    Este ejercicio utiliza funciones de la librería
-    **libreria_funciones_proyecto1.py**.
+    Este ejercicio utiliza funciones de una librería externa para calcular indicadores de mantenimiento 
+    a partir de las horas de operación, número de fallas y tiempo de reparación. Se obtienen los valores de MTBF, MTTR, Disponibilidad y OEE, 
+    mostrando además un diagnóstico, un historial de resultados y un gráfico con la evolución de los indicadores calculados.
 
     Primero se calculan:
 
@@ -848,8 +849,9 @@ def ejercicio4():
     st.markdown("""
     ### Descripción
 
-    Este ejercicio utiliza la clase **EquipoMantenimiento**
-    de la librería externa.
+    Este ejercicio implementa un sistema CRUD utilizando la clase EquipoMantenimiento de una librería externa. 
+    Permite crear, consultar, actualizar y eliminar registros de equipos, calculando automáticamente los indicadores MTBF, MTTR y 
+    Disponibilidad. Además, incorpora un dashboard con métricas, gráficos comparativos y la opción de exportar la información a un archivo CSV.
 
     Se implementan las operaciones CRUD:
 
@@ -858,7 +860,7 @@ def ejercicio4():
     - Actualizar
     - Eliminar
 
-    utilizando Programación Orientada a Objetos.
+    utilizando OOP (Object Oriented Programming).
     """)
 
     tabs = st.tabs([
