@@ -1279,7 +1279,7 @@ if opcion == "Home":
 
     with col2:
 
-        st.markdown("## 👤 Información del Estudiante"")
+        st.markdown("## 👤 Información del Estudiante")
 
         st.write("**Nombre:** Nick Dante Flores Pérez")
 
