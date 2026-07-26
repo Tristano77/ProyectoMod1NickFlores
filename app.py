@@ -14,7 +14,7 @@ import numpy as np
 
 # Librerías proporcionadas para el proyecto
 import libreria_funciones_proyecto1 as lf
-import librería_clases_proyecto1 as lc
+import libreria_clases_proyecto1 as lc
 
 
 # ----------------------------------------------------------
