@@ -79,8 +79,8 @@ if "historial_funciones" not in st.session_state:
 
 # ---------- Ejercicio 4 ----------
 
-if "registros_crud" not in st.session_state:
-    st.session_state.registros_crud = []
+if "equipos_crud" not in st.session_state:
+    st.session_state.equipos_crud = []
 
 
 # ==========================================================
@@ -837,6 +837,358 @@ def ejercicio3():
                 st.rerun()
 
 # ==========================================================
+# EJERCICIO 4
+# CRUD CON CLASES
+# ==========================================================
+
+def ejercicio4():
+
+    st.title("🛠 Ejercicio 4 - CRUD de Equipos de Mantenimiento")
+
+    st.markdown("""
+    ### Descripción
+
+    Este ejercicio utiliza la clase **EquipoMantenimiento**
+    de la librería externa.
+
+    Se implementan las operaciones CRUD:
+
+    - Crear
+    - Leer
+    - Actualizar
+    - Eliminar
+
+    utilizando Programación Orientada a Objetos.
+    """)
+
+    tabs = st.tabs([
+        "➕ Crear",
+        "📋 Consultar",
+        "✏ Actualizar",
+        "🗑 Eliminar"
+    ])
+    # =====================================================
+    # CREAR
+    # =====================================================
+
+    with tabs[0]:
+
+        st.subheader("Registrar nuevo equipo")
+
+        nombre = st.text_input(
+            "Nombre del equipo"
+        )
+
+        col1,col2,col3 = st.columns(3)
+
+        with col1:
+
+            horas = st.number_input(
+                "Horas de operación",
+                min_value=1.0,
+                value=500.0,
+                key="crear_horas"
+            )
+
+        with col2:
+
+            fallas = st.number_input(
+                "Número de fallas",
+                min_value=1,
+                value=5,
+                key="crear_fallas"
+            )
+
+        with col3:
+
+            reparacion = st.number_input(
+                "Horas de reparación",
+                min_value=0.0,
+                value=20.0,
+                key="crear_rep"
+            )
+
+        if st.button(
+            "Guardar Equipo",
+            use_container_width=True
+        ):
+
+            try:
+
+                equipo = lc.EquipoMantenimiento(
+
+                    nombre,
+
+                    horas,
+
+                    fallas,
+
+                    reparacion
+
+                )
+
+                st.session_state.equipos_crud.append(
+
+                    equipo.resumen()
+
+                )
+
+                st.success(
+                    "Equipo registrado correctamente."
+                )
+
+            except Exception as e:
+
+                st.error(e)
+    # =====================================================
+    # CONSULTAR
+    # =====================================================
+
+    with tabs[1]:
+
+        st.subheader("Equipos registrados")
+
+        if len(st.session_state.equipos_crud)==0:
+
+            st.info(
+                "No existen registros."
+            )
+
+        else:
+
+            df = pd.DataFrame(
+                st.session_state.equipos_crud
+            )
+
+            st.dataframe(
+                df,
+                use_container_width=True
+            )
+    # =====================================================
+    # ACTUALIZAR
+    # =====================================================
+
+    with tabs[2]:
+
+        st.subheader("Actualizar Equipo")
+
+        if len(st.session_state.equipos_crud) == 0:
+
+            st.info("No existen registros para actualizar.")
+
+        else:
+
+            df = pd.DataFrame(st.session_state.equipos_crud)
+
+            indice = st.selectbox(
+                "Seleccione el equipo",
+                df.index,
+                format_func=lambda x: df.loc[x, "equipo"]
+            )
+
+            nombre = st.text_input(
+                "Nombre",
+                value=df.loc[indice, "equipo"],
+                key="upd_nombre"
+            )
+
+            col1, col2, col3 = st.columns(3)
+
+            with col1:
+
+                horas = st.number_input(
+                    "Horas Operación",
+                    min_value=1.0,
+                    value=float(df.loc[indice, "mtbf_h"]),
+                    key="upd_horas"
+                )
+
+            with col2:
+
+                fallas = st.number_input(
+                    "Número Fallas",
+                    min_value=1,
+                    value=1,
+                    key="upd_fallas"
+                )
+
+            with col3:
+
+                reparacion = st.number_input(
+                    "Horas Reparación",
+                    min_value=0.0,
+                    value=float(df.loc[indice, "mttr_h"]),
+                    key="upd_rep"
+                )
+
+            if st.button(
+                "Actualizar",
+                use_container_width=True
+            ):
+
+                equipo = lc.EquipoMantenimiento(
+
+                    nombre,
+
+                    horas,
+
+                    fallas,
+
+                    reparacion
+
+                )
+
+                st.session_state.equipos_crud[indice] = equipo.resumen()
+
+                st.success("Equipo actualizado correctamente.")
+
+                st.rerun()
+    # =====================================================
+    # ELIMINAR
+    # =====================================================
+
+    with tabs[3]:
+
+        st.subheader("Eliminar Equipo")
+
+        if len(st.session_state.equipos_crud)==0:
+
+            st.info("No existen registros.")
+
+        else:
+
+            df = pd.DataFrame(st.session_state.equipos_crud)
+
+            indice = st.selectbox(
+
+                "Equipo",
+
+                df.index,
+
+                format_func=lambda x: df.loc[x,"equipo"],
+
+                key="delete"
+
+            )
+
+            st.write(df.loc[indice])
+
+            if st.button(
+
+                "Eliminar Equipo",
+
+                type="primary",
+
+                use_container_width=True
+
+            ):
+
+                st.session_state.equipos_crud.pop(indice)
+
+                st.success("Registro eliminado.")
+
+                st.rerun()
+    # =====================================================
+    # DASHBOARD
+    # =====================================================
+
+    if len(st.session_state.equipos_crud) > 0:
+
+        st.divider()
+
+        st.header("Dashboard")
+
+        df = pd.DataFrame(st.session_state.equipos_crud)
+
+        c1,c2,c3,c4 = st.columns(4)
+
+        with c1:
+
+            st.metric(
+
+                "Equipos",
+
+                len(df)
+
+            )
+
+        with c2:
+
+            st.metric(
+
+                "MTBF Promedio",
+
+                f"{df['mtbf_h'].mean():.2f}"
+
+            )
+
+        with c3:
+
+            st.metric(
+
+                "MTTR Promedio",
+
+                f"{df['mttr_h'].mean():.2f}"
+
+            )
+
+        with c4:
+
+            st.metric(
+
+                "Disponibilidad",
+
+                f"{df['disponibilidad_pct'].mean():.2f}%"
+
+            )
+        st.divider()
+
+        st.subheader("Disponibilidad por Equipo")
+
+        fig, ax = plt.subplots(figsize=(10,5))
+
+        ax.plot(
+
+            df["equipo"],
+
+            df["disponibilidad_pct"],
+
+            marker="o",
+
+            linewidth=2
+
+        )
+
+        ax.set_ylim(0,100)
+
+        ax.set_ylabel("Disponibilidad (%)")
+
+        ax.set_xlabel("Equipo")
+
+        ax.grid(True)
+
+        plt.xticks(rotation=20)
+
+        st.pyplot(fig)
+        
+        st.divider()
+
+        csv = df.to_csv(index=False)
+
+        st.download_button(
+
+            "📥 Descargar Equipos CSV",
+
+            csv,
+
+            "equipos.csv",
+
+            "text/csv",
+
+            use_container_width=True
+
+        )
+# ==========================================================
 # HOME
 # ==========================================================
 
@@ -913,12 +1265,10 @@ En el proyecto se desarrollan cuatro ejercicios donde se utilizan:
         "Seleccione uno de los ejercicios desde el menú lateral para comenzar."
     )
 elif opcion == "Ejercicio 1":
-
     ejercicio1()
 elif opcion == "Ejercicio 2":
-
     ejercicio2()
 elif opcion == "Ejercicio 3":
-
     ejercicio3()
-    
+elif opcion == "Ejercicio 4":
+    ejercicio4()
