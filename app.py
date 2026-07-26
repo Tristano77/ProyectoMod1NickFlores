@@ -310,7 +310,248 @@ def ejercicio1():
                 f"Movimiento mínimo: S/. {df['Valor'].min():,.2f}"
             )
 
+# ==========================================================
+# EJERCICIO 2
+# REGISTRO DE PRODUCTOS CON NUMPY
+# ==========================================================
 
+def ejercicio2():
+
+    st.title("📦 Ejercicio 2 - Registro con NumPy")
+
+    st.markdown("""
+    ### Descripción
+
+    Este ejercicio registra productos utilizando **arreglos de NumPy**.
+    Cada nuevo producto se almacena en los arrays y posteriormente se
+    construye un **DataFrame de Pandas** para visualizar la información.
+    """)
+
+    st.divider()
+
+    # ------------------------------------------------------
+    # FORMULARIO
+    # ------------------------------------------------------
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+
+        producto = st.text_input(
+            "Nombre del producto",
+            placeholder="Ejemplo: Disco de freno"
+        )
+
+        categoria = st.selectbox(
+            "Categoría",
+            (
+                "Repuestos",
+                "Herramientas",
+                "Lubricantes",
+                "Seguridad",
+                "Consumibles",
+                "Otros"
+            )
+        )
+
+    with col2:
+
+        precio = st.number_input(
+            "Precio Unitario",
+            min_value=0.0,
+            step=1.0,
+            format="%.2f"
+        )
+
+        cantidad = st.number_input(
+            "Cantidad",
+            min_value=1,
+            step=1
+        )
+
+    total = precio * cantidad
+
+    st.info(f"Total del registro : S/. {total:,.2f}")
+
+    st.write("")
+
+    col1, col2 = st.columns(2)
+
+    # ------------------------------------------------------
+    # BOTÓN AGREGAR
+    # ------------------------------------------------------
+
+    with col1:
+
+        if st.button(
+            "➕ Agregar producto",
+            use_container_width=True
+        ):
+
+            if producto.strip() == "":
+
+                st.warning("Debe ingresar un producto.")
+
+            else:
+
+                st.session_state.productos = np.append(
+                    st.session_state.productos,
+                    producto
+                )
+
+                st.session_state.categorias = np.append(
+                    st.session_state.categorias,
+                    categoria
+                )
+
+                st.session_state.precios = np.append(
+                    st.session_state.precios,
+                    precio
+                )
+
+                st.session_state.cantidades = np.append(
+                    st.session_state.cantidades,
+                    cantidad
+                )
+
+                st.session_state.totales = np.append(
+                    st.session_state.totales,
+                    total
+                )
+
+                st.success("Producto agregado correctamente.")
+
+    # ------------------------------------------------------
+    # LIMPIAR
+    # ------------------------------------------------------
+
+    with col2:
+
+        if st.button(
+            "🗑 Limpiar productos",
+            use_container_width=True
+        ):
+
+            st.session_state.productos = np.array([], dtype=object)
+
+            st.session_state.categorias = np.array([], dtype=object)
+
+            st.session_state.precios = np.array([], dtype=float)
+
+            st.session_state.cantidades = np.array([], dtype=int)
+
+            st.session_state.totales = np.array([], dtype=float)
+
+            st.success("Registros eliminados.")
+
+    st.divider()
+
+    # ------------------------------------------------------
+    # DATAFRAME
+    # ------------------------------------------------------
+
+    if len(st.session_state.productos) == 0:
+
+        st.info("No existen productos registrados.")
+
+        return
+
+    df = pd.DataFrame({
+
+        "Producto": st.session_state.productos,
+
+        "Categoría": st.session_state.categorias,
+
+        "Precio": st.session_state.precios,
+
+        "Cantidad": st.session_state.cantidades,
+
+        "Total": st.session_state.totales
+
+    })
+
+    st.subheader("Inventario registrado")
+
+    st.dataframe(
+        df,
+        use_container_width=True
+    )
+
+    st.divider()
+
+    # ------------------------------------------------------
+    # MÉTRICAS
+    # ------------------------------------------------------
+
+    c1, c2, c3, c4 = st.columns(4)
+
+    with c1:
+
+        st.metric(
+            "Productos",
+            len(df)
+        )
+
+    with c2:
+
+        st.metric(
+            "Cantidad Total",
+            int(df["Cantidad"].sum())
+        )
+
+    with c3:
+
+        st.metric(
+            "Precio Promedio",
+            f"S/. {df['Precio'].mean():,.2f}"
+        )
+
+    with c4:
+
+        st.metric(
+            "Valor Inventario",
+            f"S/. {df['Total'].sum():,.2f}"
+        )
+
+    st.divider()
+
+    # ------------------------------------------------------
+    # ESTADÍSTICAS
+    # ------------------------------------------------------
+
+    with st.expander("📈 Estadísticas"):
+
+        st.write(
+            f"Producto más costoso : **{df.loc[df['Precio'].idxmax(),'Producto']}**"
+        )
+
+        st.write(
+            f"Producto más económico : **{df.loc[df['Precio'].idxmin(),'Producto']}**"
+        )
+
+        st.write(
+            f"Cantidad promedio : **{df['Cantidad'].mean():.2f}**"
+        )
+
+        st.write(
+            f"Venta promedio : **S/. {df['Total'].mean():,.2f}**"
+        )
+
+        categoria_mayor = (
+            df.groupby("Categoría")["Total"]
+            .sum()
+            .sort_values(ascending=False)
+        )
+
+        st.subheader("Ventas por categoría")
+
+        st.dataframe(categoria_mayor)
+
+        st.subheader("Resumen estadístico")
+
+        st.dataframe(
+            df.describe(include="all")
+        )
 
 # ==========================================================
 # HOME
@@ -391,4 +632,7 @@ En el proyecto se desarrollan cuatro ejercicios donde se utilizan:
 elif opcion == "Ejercicio 1":
 
     ejercicio1()
+elif opcion == "Ejercicio 2":
+
+    ejercicio2()
     
