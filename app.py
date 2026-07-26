@@ -1272,19 +1272,11 @@ if opcion == "Home":
 
     st.markdown("---")
 
-    col1, col2 = st.columns([1, 2])
-
+    col1, col2 = st.columns([0.8, 2.2])
+    
     with col1:
-    
-        c1, c2, c3 = st.columns([1,4,1])
-    
-        with c2:
-            st.image("Python_logo.png", width=400)
-    
-        c1, c2, c3 = st.columns([1,4,1])
-    
-        with c2:
-            st.image("DMC.png", width=220)
+        st.image("Python_logo.png", width=250)
+        st.image("DMC.png", width=220)
 
     with col2:
 
