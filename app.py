@@ -690,22 +690,6 @@ def ejercicio3():
 
            #--------------------------
             
-            st.subheader("Visualización de Indicadores")
-            
-            fig, ax = plt.subplots(figsize=(6,4))
-            
-            ax.bar(
-                ["Disponibilidad","OEE"],
-                [disponibilidad, oee_final]
-            )
-            
-            ax.set_ylim(0,100)
-            ax.set_ylabel("Porcentaje (%)")
-            
-            for i,v in enumerate([disponibilidad,oee_final]):
-                ax.text(i, v+2, f"{v:.2f}%", ha="center")
-            
-            st.pyplot(fig)
             #--------
             st.divider()
 
@@ -747,24 +731,26 @@ def ejercicio3():
                     "OEE bajo."
                 )
             registro = {
-
-                "Horas Operación":horas_operacion,
-
-                "Fallas":numero_fallas,
-
-                "Horas Reparación":horas_reparacion,
-
-                "MTBF":mtbf,
-
-                "MTTR":mttr,
-
-                "Disponibilidad":disponibilidad,
-
-                "Rendimiento":rendimiento,
-
-                "Calidad":calidad,
-
-                "OEE":oee_final
+        
+            "Ejecución": len(st.session_state.historial_funciones)+1,
+        
+            "Horas Operación": horas_operacion,
+        
+            "Fallas": numero_fallas,
+        
+            "Horas Reparación": horas_reparacion,
+        
+            "MTBF": mtbf,
+        
+            "MTTR": mttr,
+        
+            "Disponibilidad": disponibilidad,
+        
+            "Rendimiento": rendimiento,
+        
+            "Calidad": calidad,
+        
+            "OEE": oee_final
 
             }
 
@@ -789,7 +775,39 @@ def ejercicio3():
             historial,
             use_container_width=True
         )
-
+        st.subheader("Histórico de Disponibilidad y OEE")
+        
+        fig, ax = plt.subplots(figsize=(10,5))
+        
+        ax.plot(
+            historial["Ejecución"],
+            historial["Disponibilidad"],
+            marker="o",
+            linewidth=2,
+            label="Disponibilidad"
+        )
+        
+        ax.plot(
+            historial["Ejecución"],
+            historial["OEE"],
+            marker="s",
+            linewidth=2,
+            label="OEE"
+        )
+        
+        ax.set_xlabel("Ejecución")
+        
+        ax.set_ylabel("Porcentaje (%)")
+        
+        ax.set_title("Evolución de Indicadores")
+        
+        ax.set_ylim(0,100)
+        
+        ax.grid(True)
+        
+        ax.legend()
+        
+        st.pyplot(fig)
         col1,col2 = st.columns(2)
 
         with col1:
