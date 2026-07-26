@@ -570,12 +570,12 @@ def ejercicio3():
 
     Primero se calculan:
 
-    - MTBF
-    - MTTR
+    - MTBF (Mean Time Between Failure) Tiempo medio entre fallas
+    - MTTR (Mean Time to Repair) Tiemp medio entre reparaciones
     - Disponibilidad
 
     Posteriormente, utilizando la disponibilidad calculada,
-    se determina el **OEE** del equipo.
+    se determina el **OEE** (Overall Equipment Effectiveness) del equipo.
     """)
 
     st.divider()
