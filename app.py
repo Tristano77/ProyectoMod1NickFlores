@@ -916,26 +916,30 @@ def ejercicio4():
             try:
 
                 equipo = lc.EquipoMantenimiento(
-
+            
                     nombre,
-
+                
                     horas,
-
+                
                     fallas,
-
+                
                     reparacion
-
+            
                 )
-
-                st.session_state.equipos_crud.append(
-
-                    equipo.resumen()
-
-                )
-
-                st.success(
-                    "Equipo registrado correctamente."
-                )
+                
+                registro = equipo.resumen()
+                
+                # Guardamos también los datos originales
+                
+                registro["horas_operacion"] = horas
+                
+                registro["numero_fallas"] = fallas
+                
+                registro["horas_reparacion"] = reparacion
+                
+                st.session_state.equipos_crud.append(registro)
+    
+                st.success("Equipo registrado correctamente.")
 
             except Exception as e:
 
@@ -956,93 +960,131 @@ def ejercicio4():
 
         else:
 
-            df = pd.DataFrame(
-                st.session_state.equipos_crud
-            )
-
+            df = pd.DataFrame(st.session_state.equipos_crud)
+            
+            # Ordenar columnas
+            df = df[
+                [
+                    "equipo",
+                    "horas_operacion",
+                    "numero_fallas",
+                    "horas_reparacion",
+                    "mtbf_h",
+                    "mttr_h",
+                    "disponibilidad_pct"
+                ]
+            ]
+            
+            # Cambiar nombres de columnas
+            df = df.rename(columns={
+                "equipo": "Equipo",
+                "horas_operacion": "Horas Operación (h)",
+                "numero_fallas": "N° Fallas",
+                "horas_reparacion": "Horas Reparación (h)",
+                "mtbf_h": "MTBF (h)",
+                "mttr_h": "MTTR (h)",
+                "disponibilidad_pct": "Disponibilidad (%)"
+            })
+            
             st.dataframe(
                 df,
-                use_container_width=True
+                use_container_width=True,
+                hide_index=True
             )
     # =====================================================
     # ACTUALIZAR
     # =====================================================
-
+    
     with tabs[2]:
-
+    
         st.subheader("Actualizar Equipo")
-
+    
         if len(st.session_state.equipos_crud) == 0:
-
+    
             st.info("No existen registros para actualizar.")
-
+    
         else:
-
+    
             df = pd.DataFrame(st.session_state.equipos_crud)
-
+    
             indice = st.selectbox(
                 "Seleccione el equipo",
                 df.index,
                 format_func=lambda x: df.loc[x, "equipo"]
             )
-
+    
             nombre = st.text_input(
                 "Nombre",
                 value=df.loc[indice, "equipo"],
                 key="upd_nombre"
             )
-
+    
             col1, col2, col3 = st.columns(3)
-
+    
             with col1:
-
+    
                 horas = st.number_input(
-                    "Horas Operación",
+                    "Horas de Operación",
                     min_value=1.0,
-                    value=float(df.loc[indice, "mtbf_h"]),
+                    value=float(df.loc[indice, "horas_operacion"]),
                     key="upd_horas"
                 )
-
+    
             with col2:
-
+    
                 fallas = st.number_input(
-                    "Número Fallas",
+                    "Número de Fallas",
                     min_value=1,
-                    value=1,
+                    value=int(df.loc[indice, "numero_fallas"]),
                     key="upd_fallas"
                 )
-
+    
             with col3:
-
+    
                 reparacion = st.number_input(
-                    "Horas Reparación",
+                    "Horas de Reparación",
                     min_value=0.0,
-                    value=float(df.loc[indice, "mttr_h"]),
+                    value=float(df.loc[indice, "horas_reparacion"]),
                     key="upd_rep"
                 )
-
+    
             if st.button(
                 "Actualizar",
                 use_container_width=True
             ):
-
-                equipo = lc.EquipoMantenimiento(
-
-                    nombre,
-
-                    horas,
-
-                    fallas,
-
-                    reparacion
-
-                )
-
-                st.session_state.equipos_crud[indice] = equipo.resumen()
-
-                st.success("Equipo actualizado correctamente.")
-
-                st.rerun()
+            
+                try:
+            
+                    equipo = lc.EquipoMantenimiento(
+            
+                        nombre,
+            
+                        horas,
+            
+                        fallas,
+            
+                        reparacion
+            
+                    )
+            
+                    # Obtener el resumen calculado por la clase
+                    registro = equipo.resumen()
+            
+                    # Agregar los datos originales del equipo
+                    registro["horas_operacion"] = horas
+                    registro["numero_fallas"] = fallas
+                    registro["horas_reparacion"] = reparacion
+            
+                    # Actualizar el registro seleccionado
+                    st.session_state.equipos_crud[indice] = registro
+            
+                    st.success("Equipo actualizado correctamente.")
+            
+                    st.rerun()
+            
+                except Exception as e:
+            
+                    st.error(f"Error al actualizar el equipo: {e}")
     # =====================================================
     # ELIMINAR
     # =====================================================
@@ -1094,81 +1136,110 @@ def ejercicio4():
 
     if len(st.session_state.equipos_crud) > 0:
 
-        st.divider()
-
-        st.header("Dashboard")
-
         df = pd.DataFrame(st.session_state.equipos_crud)
 
-        c1,c2,c3,c4 = st.columns(4)
-
-        with c1:
-
-            st.metric(
-
-                "Equipos",
-
-                len(df)
-
-            )
-
-        with c2:
-
-            st.metric(
-
-                "MTBF Promedio",
-
-                f"{df['mtbf_h'].mean():.2f}"
-
-            )
-
-        with c3:
-
-            st.metric(
-
-                "MTTR Promedio",
-
-                f"{df['mttr_h'].mean():.2f}"
-
-            )
-
-        with c4:
-
-            st.metric(
-
-                "Disponibilidad",
-
-                f"{df['disponibilidad_pct'].mean():.2f}%"
-
-            )
         st.divider()
 
-        st.subheader("Disponibilidad por Equipo")
-
-        fig, ax = plt.subplots(figsize=(10,5))
-
-        ax.plot(
-
+        st.header("Dashboard de Mantenimiento")
+        
+        c1, c2, c3 = st.columns(3)
+        
+        with c1:
+        
+            st.metric(
+                "Equipos Registrados",
+                len(df)
+            )
+        
+        with c2:
+        
+            st.metric(
+                "Horas Operación Totales",
+                f"{df['horas_operacion'].sum():,.1f}"
+            )
+        
+        with c3:
+        
+            st.metric(
+                "Total de Fallas",
+                int(df["numero_fallas"].sum())
+            )
+        
+        c1, c2, c3 = st.columns(3)
+        
+        with c1:
+        
+            st.metric(
+                "MTBF Promedio",
+                f"{df['mtbf_h'].mean():.2f} h"
+            )
+        
+        with c2:
+        
+            st.metric(
+                "MTTR Promedio",
+                f"{df['mttr_h'].mean():.2f} h"
+            )
+        
+        with c3:
+        
+            st.metric(
+                "Disponibilidad Promedio",
+                f"{df['disponibilidad_pct'].mean():.2f}%"
+            )
+        st.divider()
+  
+        st.subheader("Indicadores de Mantenimiento por Equipo")
+        
+        fig, ax1 = plt.subplots(figsize=(10,5))
+        
+        # Disponibilidad (eje izquierdo)
+        ax1.plot(
             df["equipo"],
-
             df["disponibilidad_pct"],
-
             marker="o",
-
-            linewidth=2
-
+            linewidth=2.5,
+            label="Disponibilidad (%)"
         )
-
-        ax.set_ylim(0,100)
-
-        ax.set_ylabel("Disponibilidad (%)")
-
-        ax.set_xlabel("Equipo")
-
-        ax.grid(True)
-
+        
+        ax1.set_ylabel("Disponibilidad (%)")
+        ax1.set_ylim(0,100)
+        ax1.set_xlabel("Equipo")
+        ax1.grid(True, linestyle="--", alpha=0.5)
+        
+        # MTBF (eje derecho)
+        ax2 = ax1.twinx()
+        
+        ax2.plot(
+            df["equipo"],
+            df["mtbf_h"],
+            marker="s",
+            linewidth=2.5,
+            linestyle="--",
+            label="MTBF (h)"
+        )
+        
+        ax2.set_ylabel("MTBF (h)")
+        ax2.set_ylim(
+            0,
+            df["mtbf_h"].max() * 1.15
+        )
+        # Leyenda
+        lineas1, etiquetas1 = ax1.get_legend_handles_labels()
+        lineas2, etiquetas2 = ax2.get_legend_handles_labels()
+        
+        ax1.legend(
+            lineas1 + lineas2,
+            etiquetas1 + etiquetas2,
+            loc="upper left"
+        )
+        
+        ax1.set_title("Comparación de Indicadores por Equipo")
+        
         plt.xticks(rotation=20)
-
+        
+        fig.tight_layout()
+        
         st.pyplot(fig)
         
         st.divider()
@@ -1208,7 +1279,7 @@ if opcion == "Home":
 
     with col2:
 
-        st.markdown("## Datos personales")
+        st.markdown("## 👤 Información del Estudiante"")
 
         st.write("**Nombre:** Nick Dante Flores Pérez")
 
@@ -1222,7 +1293,7 @@ if opcion == "Home":
 
     st.markdown("---")
 
-    st.header("Descripción")
+    st.header("📖 Descripción del Proyecto")
 
     st.markdown(
         """
