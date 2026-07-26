@@ -1279,7 +1279,7 @@ if opcion == "Home":
         c1, c2, c3 = st.columns([1,4,1])
     
         with c2:
-            st.image("Python_logo.png", width=280)
+            st.image("Python_logo.png", width=400)
     
         c1, c2, c3 = st.columns([1,4,1])
     
