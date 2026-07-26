@@ -1272,12 +1272,23 @@ if opcion == "Home":
 
     st.markdown("---")
 
-    col1, col2 = st.columns([0.8, 2.2])
-    
-    with col1:
-        st.image("Python_logo.png", width=250)
-        st.image("DMC.png", width=220)
+    col1, col2 = st.columns([1, 2])
 
+    with col1:
+    
+        # Centrar logo Python
+        c1, c2, c3 = st.columns([1, 2, 1])
+    
+        with c2:
+            st.image("Python_logo.png", width=250)
+    
+        st.write("")
+    
+        # Centrar logo DMC
+        c1, c2, c3 = st.columns([1, 2, 1])
+    
+        with c2:
+            st.image("DMC.png", width=220)
     with col2:
 
         st.markdown("## 👤 Información del Estudiante")
