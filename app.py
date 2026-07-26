@@ -2,7 +2,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import plotly.express as px
+import matplotlib.pyplot as plt
 import libreria_funciones_proyecto1 as lf
 import libreria_clases_proyecto1 as lc
 
@@ -688,58 +688,25 @@ def ejercicio3():
                     f"{oee_final:.2f}%"
                 )
 
+           #--------------------------
+            
             st.subheader("Visualización de Indicadores")
             
-            grafico = pd.DataFrame({
+            fig, ax = plt.subplots(figsize=(6,4))
             
-                "Indicador":[
-                    "Disponibilidad",
-                    "OEE"
-                ],
-            
-                "Valor":[
-                    disponibilidad,
-                    oee_final
-                ]
-            
-            })
-            
-            fig = px.bar(
-            
-                grafico,
-            
-                x="Indicador",
-            
-                y="Valor",
-            
-                text="Valor",
-            
-                color="Indicador",
-            
-                range_y=[0,100]
-            
+            ax.bar(
+                ["Disponibilidad","OEE"],
+                [disponibilidad, oee_final]
             )
             
-            fig.update_traces(
+            ax.set_ylim(0,100)
+            ax.set_ylabel("Porcentaje (%)")
             
-                texttemplate="%{text:.2f}%",
+            for i,v in enumerate([disponibilidad,oee_final]):
+                ax.text(i, v+2, f"{v:.2f}%", ha="center")
             
-                textposition="outside"
-            
-            )
-            
-            fig.update_layout(
-            
-                showlegend=False,
-            
-                height=450
-            
-            )
-            
-            st.plotly_chart(
-                fig,
-                use_container_width=True
-            )
+            st.pyplot(fig)
+            #--------
             st.divider()
 
             st.subheader("Diagnóstico")
