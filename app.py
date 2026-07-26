@@ -1285,9 +1285,8 @@ if opcion == "Home":
 
         st.write("**Nombre:** Nick Dante Flores Pérez")
 
-        st.write("**About me:** Ingeniero Electrónico con especialización en Instrumentación y Control de Procesos. 
-        Interesado en automatización industrial, mantenimiento basado en datos, inteligencia artificial aplicada y 
-        desarrollo de aplicaciones para la toma de decisiones.")
+        st.write("""**About me:** Ingeniero Electrónico especializado en instrumentación y control de procesos, 
+        orientado al desarrollo de soluciones para automatización industrial, análisis de datos y visualización de información.""")
 
         st.write("**Módulo:** Python con Streamlit")
 
