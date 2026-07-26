@@ -40,7 +40,7 @@ opcion = st.sidebar.selectbox(
 
 st.sidebar.markdown("---")
 
-st.sidebar.success("Python • NumPy • Pandas • Streamlit")
+st.sidebar.success("Python • NumPy • Pandas • Matplotlib • Streamlit")
 
 
 # ----------------------------------------------------------
@@ -1285,11 +1285,11 @@ if opcion == "Home":
 
         st.write("**Nombre:** Nick Dante Flores Pérez")
 
-        st.write("**About me:** Ingeniero Electrónico con especialidad en instrumentación y control de procesos.")
+        st.write("**About me:** Ingeniero Electrónico con especialización en Instrumentación y Control de Procesos. 
+        Interesado en automatización industrial, mantenimiento basado en datos, inteligencia artificial aplicada y 
+        desarrollo de aplicaciones para la toma de decisiones.")
 
         st.write("**Módulo:** Python con Streamlit")
-        
-        st.write("**Institución:** DMC")
 
         st.write("**Año:** 2026")
 
@@ -1299,13 +1299,14 @@ if opcion == "Home":
 
     st.markdown(
         """
-Esta aplicación integra los conocimientos adquiridos durante el módulo de Python.
+Esta aplicación integra los conocimientos adquiridos durante el módulo 1 de Python for Analytics.
 
 En el proyecto se desarrollan cuatro ejercicios donde se utilizan:
 
 - Listas
 - NumPy
 - Pandas
+- Matplotlib
 - Funciones
 - Clases
 - Programación Orientada a Objetos
