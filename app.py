@@ -1275,9 +1275,16 @@ if opcion == "Home":
     col1, col2 = st.columns([1, 2])
 
     with col1:
-
-        st.image("Python_logo.png", width=440)
-        st.image("DMC.png", width=330)
+    
+        c1, c2, c3 = st.columns([1,4,1])
+    
+        with c2:
+            st.image("Python_logo.png", width=280)
+    
+        c1, c2, c3 = st.columns([1,4,1])
+    
+        with c2:
+            st.image("DMC.png", width=220)
 
     with col2:
 
