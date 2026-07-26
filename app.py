@@ -554,6 +554,250 @@ def ejercicio2():
         )
 
 # ==========================================================
+# EJERCICIO 3
+# FUNCIONES DE LA LIBRERÍA EXTERNA
+# ==========================================================
+
+def ejercicio3():
+
+    st.title("⚙ Ejercicio 3 - Indicadores de Mantenimiento")
+
+    st.markdown("""
+    ### Descripción
+
+    Este ejercicio utiliza funciones de la librería
+    **libreria_funciones_proyecto1.py**.
+
+    Primero se calculan:
+
+    - MTBF
+    - MTTR
+    - Disponibilidad
+
+    Posteriormente, utilizando la disponibilidad calculada,
+    se determina el **OEE** del equipo.
+    """)
+
+    st.divider()
+
+    col1,col2 = st.columns(2)
+
+    with col1:
+
+        horas_operacion = st.number_input(
+            "Horas de operación",
+            min_value=1.0,
+            value=500.0
+        )
+
+        numero_fallas = st.number_input(
+            "Número de fallas",
+            min_value=1,
+            value=5
+        )
+
+    with col2:
+
+        horas_reparacion = st.number_input(
+            "Horas de reparación",
+            min_value=0.0,
+            value=18.0
+        )
+
+        rendimiento = st.slider(
+            "Rendimiento (%)",
+            0.0,
+            100.0,
+            95.0
+        )
+
+    calidad = st.slider(
+        "Calidad (%)",
+        0.0,
+        100.0,
+        98.0
+    )
+
+    st.divider()
+
+    if st.button(
+        "Calcular Indicadores",
+        use_container_width=True
+    ):
+
+        try:
+
+            indicadores = lf.calcular_indicadores_mantenimiento(
+
+                horas_operacion,
+
+                numero_fallas,
+
+                horas_reparacion
+
+            )
+
+            oee = lf.calcular_oee(
+
+                indicadores["disponibilidad_pct"],
+
+                rendimiento,
+
+                calidad
+
+            )
+
+            mtbf = indicadores["mtbf_h"]
+
+            mttr = indicadores["mttr_h"]
+
+            disponibilidad = indicadores["disponibilidad_pct"]
+
+            oee_final = oee["oee_pct"]
+
+            st.subheader("Resultados")
+
+            c1,c2,c3,c4 = st.columns(4)
+
+            with c1:
+
+                st.metric(
+                    "MTBF",
+                    f"{mtbf:.2f} h"
+                )
+
+            with c2:
+
+                st.metric(
+                    "MTTR",
+                    f"{mttr:.2f} h"
+                )
+
+            with c3:
+
+                st.metric(
+                    "Disponibilidad",
+                    f"{disponibilidad:.2f}%"
+                )
+
+            with c4:
+
+                st.metric(
+                    "OEE",
+                    f"{oee_final:.2f}%"
+                )
+            st.divider()
+
+            st.subheader("Diagnóstico")
+
+            if disponibilidad >=95:
+
+                st.success(
+                    "Excelente disponibilidad."
+                )
+
+            elif disponibilidad>=85:
+
+                st.warning(
+                    "Disponibilidad aceptable."
+                )
+
+            else:
+
+                st.error(
+                    "Disponibilidad baja."
+                )
+
+            if oee_final>=85:
+
+                st.success(
+                    "OEE de clase mundial."
+                )
+
+            elif oee_final>=60:
+
+                st.warning(
+                    "OEE aceptable."
+                )
+
+            else:
+
+                st.error(
+                    "OEE bajo."
+                )
+            registro = {
+
+                "Horas Operación":horas_operacion,
+
+                "Fallas":numero_fallas,
+
+                "Horas Reparación":horas_reparacion,
+
+                "MTBF":mtbf,
+
+                "MTTR":mttr,
+
+                "Disponibilidad":disponibilidad,
+
+                "Rendimiento":rendimiento,
+
+                "Calidad":calidad,
+
+                "OEE":oee_final
+
+            }
+
+            st.session_state.historial_funciones.append(
+                registro
+            )
+
+        except Exception as e:
+
+            st.error(e)
+    if len(st.session_state.historial_funciones)>0:
+
+        st.divider()
+
+        st.subheader("Histórico")
+
+        historial = pd.DataFrame(
+            st.session_state.historial_funciones
+        )
+
+        st.dataframe(
+            historial,
+            use_container_width=True
+        )
+
+        col1,col2 = st.columns(2)
+
+        with col1:
+
+            csv = historial.to_csv(index=False)
+
+            st.download_button(
+
+                "📥 Descargar CSV",
+
+                csv,
+
+                "historial_mantenimiento.csv",
+
+                "text/csv"
+
+            )
+
+        with col2:
+
+            if st.button(
+                "🗑 Limpiar historial"
+            ):
+
+                st.session_state.historial_funciones=[]
+
+                st.rerun()
+
+# ==========================================================
 # HOME
 # ==========================================================
 
